@@ -10,6 +10,7 @@
 #   }
 
 find /usr/share/nginx/html \
+  -type f \
   -name '*.json' \
   -print0 \
   | xargs -0 \
