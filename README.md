@@ -3,6 +3,15 @@
 A dump of the `pokeapi.co` packaged in a neat NGINX server. Only look-up by
 ID or namess are supported - no pagination is offered.
 
+To spin this up, run:
+
+```bash
+docker run --rm -it \
+  -p 8080:80 \
+  -e ENDPOINT=http://localhost:8080 \
+  docker.io/alexandrecarlton/pokeapi-dump:latest
+```
+
 ## Motivation
 
 The existing endpoint contains a wealth of data but it is locked behind an
