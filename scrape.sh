@@ -34,6 +34,9 @@ NAMES='
   move
   move-ailment
   move-battle-style
+  move-category
+  move-damage-class
+  move-learn-method
   move-target
   ability
   characteristic

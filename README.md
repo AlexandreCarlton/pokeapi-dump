@@ -1,5 +1,7 @@
 # PokeAPI dump
 
+![Build](https://github.com/alexandrecarlton/pokeapi-dump/actions/workflows/build-and-push.yml/badge.svg)
+
 A dump of the `pokeapi.co` packaged in a neat NGINX server. Only look-up by
 ID or namess are supported - no pagination is offered.
 
