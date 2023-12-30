@@ -2,16 +2,18 @@
 
 ![Build](https://github.com/alexandrecarlton/pokeapi-dump/actions/workflows/build-and-push.yml/badge.svg)
 
-A dump of the `pokeapi.co` packaged in a neat NGINX server. Only look-up by
-ID or namess are supported - no pagination is offered.
+A dump of the `pokeapi.co` packaged in an NGINX server for improved latency.
+Only look-up by ID or namess are supported - no pagination is offered.
 
-To spin this up, run:
+To spin this up and use it, run:
 
 ```bash
 docker run --rm -it \
   -p 8080:80 \
   -e ENDPOINT=http://localhost:8080 \
   docker.io/alexandrecarlton/pokeapi-dump:latest
+
+curl http://localhost:8080/pokemon/1/
 ```
 
 ## Motivation
@@ -36,8 +38,8 @@ We:
 
  - Pagination not supported (e.g. `/pokemon?limit=10`)
  - Path `/pokemon/{id or name}/encounters` not supported.
- - Look-up by name for data that share the same ID may return different data to
-   the original.
+ - Look-up by name for data that share the same name may return different data to
+   the original (e.g. they may contain different IDs).
 
 # Running
 
