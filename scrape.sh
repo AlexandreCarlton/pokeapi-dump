@@ -59,8 +59,18 @@ NAMES='
 mkdir -p $DUMP_DIR
 
 for name in $NAMES; do
+
+  if [ -e "$DUMP_DIR/$name.json" ]; then
+    echo "$DUMP_DIR/$name.json exists, skipping..." >&2
+  else
+    echo "Dumping $ENDPOINT/$name?limit=$LIMIT to $DUMP_DIR/$name.json..."
+    curl -sSfL "$ENDPOINT/$name?limit=$LIMIT" \
+      | sed "s|$ENDPOINT|ENDPOINT|g" \
+      > "$DUMP_DIR/$name.json"
+  fi
+
   mkdir -p "$DUMP_DIR/$name"
-  curl -sSfL "$ENDPOINT/$name?limit=$LIMIT" \
-    | jq -r .results[].url \
-    | parallel -j 8 ./dump-url.sh
+  jq -r .results[].url "$DUMP_DIR/$name.json" \
+    | sed "s|ENDPOINT|$ENDPOINT|g" \
+    | parallel -j $(nproc) ./dump-url.sh
 done

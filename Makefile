@@ -1,5 +1,5 @@
 
-.PHONY: all pokeapi-up pokeapi-down dump image
+.PHONY: all pokeapi-up pokeapi-down dump image run
 
 all: pokeapi-up dump image
 
@@ -14,3 +14,6 @@ dump:
 
 image:
 	docker build --tag alexandrecarlton/pokeapi-dump .
+
+run: image
+	docker run --rm -it -p 8080:80 -e ENDPOINT=http://localhost:8080 alexandrecarlton/pokeapi-dump
