@@ -67,6 +67,13 @@ make dump
 
 The contents of the dump will be stored in `./dump`.
 
+Upon updating the [`pokeapi`] submodule, it may be necessary to clear all
+volumes (in case of a database upgrade) - this can be done with
+
+```sh
+docker compose -f ... down --volumes
+```
+
 ## Server
 
 ### Requirements

@@ -16,4 +16,4 @@ image:
 	docker build --tag alexandrecarlton/pokeapi-dump .
 
 run: image
-	docker run --rm -it -p 8080:80 -e ENDPOINT=http://localhost:8080 alexandrecarlton/pokeapi-dump
+	docker run --rm -it -p 8081:80 -e ENDPOINT=http://localhost:8081 alexandrecarlton/pokeapi-dump

@@ -13,7 +13,9 @@ else
   echo "Dumping $url to $id_filename..."
 fi
 
-curl -sSfL "$url" | sed "s|$ENDPOINT|ENDPOINT|g" > "$id_filename"
+curl -sSfL --retry 5 "$url" \
+  | sed "s|$ENDPOINT|ENDPOINT|g" \
+  > "$id_filename"
 
 name=$(jq -r .name "$id_filename")
 if [ "$name" != 'null' ]; then
