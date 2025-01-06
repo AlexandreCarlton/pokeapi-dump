@@ -13,8 +13,10 @@ else
   echo "Dumping $url to $id_filename..."
 fi
 
-curl -sSfL --retry 5 "$url" \
+curl -sSfL --retry 10 "$url" \
   | sed "s|$ENDPOINT|ENDPOINT|g" \
+  | sed "s|https://raw.githubusercontent.com/PokeAPI/cries/master|ENDPOINT/static|g" \
+  | sed "s|https://raw.githubusercontent.com/PokeAPI/sprites/master|ENDPOINT/static|g" \
   > "$id_filename"
 
 name=$(jq -r .name "$id_filename")

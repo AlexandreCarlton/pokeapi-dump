@@ -2,8 +2,8 @@
 
 ![Build](https://github.com/alexandrecarlton/pokeapi-dump/actions/workflows/build-and-push.yml/badge.svg)
 
-A dump of the `pokeapi.co` packaged in an NGINX server for improved latency.
-Only look-up by ID or namess are supported - no pagination is offered.
+A dump of the `pokeapi.co` packaged in an NGINX server for improved latency at
+the cost of certain features.
 
 To spin this up and use it, run:
 
@@ -19,7 +19,8 @@ curl http://localhost:8080/pokemon/1/
 ## Motivation
 
 The existing endpoint contains a wealth of data but it is locked behind an
-remote endpoint, introducing a non-negligible latency cost.
+remote endpoint, introducing a non-negligible latency cost and the potential
+for rate-limiting.
 
 Furthermore, spinning this up locally requires multiple services and a python installation.
 
@@ -67,8 +68,8 @@ make dump
 
 The contents of the dump will be stored in `./dump`.
 
-Upon updating the [`pokeapi`] submodule, it may be necessary to clear all
-volumes (in case of a database upgrade) - this can be done with
+Upon updating the [`pokeapi`](./pokeapi) submodule, it may be necessary to
+clear all volumes (in case of a database upgrade) - this can be done with
 
 ```sh
 docker compose -f ... down --volumes
