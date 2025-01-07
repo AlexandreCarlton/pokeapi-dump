@@ -27,4 +27,7 @@ if [ "$name" != 'null' ]; then
   # We may occasionally find data with the same name - so we just force overwrite it as a mitigation strategy.
   # <dump>/<type>/<name>.json -> <id>.json
   ln -sf -- "$(basename "$id_filename")" "$name_filename"
+  # We create a broken link here, as we will create the source (which needs to capture a runtime variable) on startup.
+  # <dump>/<type>/<name>.json.gz -> <id>.json.gz
+  ln -sf -- "$(basename "$id_filename").gz" "$name_filename.gz"
 fi
