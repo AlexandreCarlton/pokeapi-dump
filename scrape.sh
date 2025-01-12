@@ -11,33 +11,33 @@
 
 LIMIT=10000
 
-mkdir -p $API_DUMP_DIR
+mkdir -p $DUMP_DIR/api/v2
 mkdir -p $STATIC_DUMP_DIR
 
 # The overall index on '/' indicates what resources are available (pokemon, item, etc.)
-if [ -e "$API_DUMP_DIR/index.json" ]; then
-  echo "$API_DUMP_DIR/index.json exists, skipping..." >&2
+if [ -e $DUMP_DIR/api/v2/index.json ]; then
+  echo "$DUMP_DIR/api/v2/index.json exists, skipping..." >&2
 else
-  echo "Dumping $ENDPOINT/index.json to $API_DUMP_DIR/index.json..."
-  curl -sSfL "$ENDPOINT/$name?limit=$LIMIT" \
+  echo "Dumping $ENDPOINT/api/v2/index.json to $DUMP_DIR/api/v2/index.json..."
+  curl -sSfL "$ENDPOINT/api/v2/" \
     | sed "s|$ENDPOINT|ENDPOINT|g" \
-    > "$API_DUMP_DIR/index.json"
+    > "$DUMP_DIR/api/v2/index.json"
 fi
 
 # Pull own each each resource (pokemon, item, etc.) to get a list of all
 # things in that resource (pokemon/1, pokemon/2) and dump it to a file.
-jq -r 'keys[]' $API_DUMP_DIR/index.json | while read -r name; do
-  if [ -e "$API_DUMP_DIR/$name.json" ]; then
-    echo "$API_DUMP_DIR/$name.json exists, skipping..." >&2
+jq -r 'keys[]' $DUMP_DIR/api/v2/index.json | while read -r name; do
+  if [ -e "$DUMP_DIR/api/v2/$name.json" ]; then
+    echo "$DUMP_DIR/api/v2/$name.json exists, skipping..." >&2
   else
-    echo "Dumping $ENDPOINT/$name?limit=$LIMIT to $API_DUMP_DIR/$name.json..."
-    curl -sSfL "$ENDPOINT/$name?limit=$LIMIT" \
+    echo "Dumping $ENDPOINT/api/v2/$name/?limit=$LIMIT to $DUMP_DIR/api/v2/$name.json..."
+    curl -sSfL "$ENDPOINT/api/v2/$name/?limit=$LIMIT" \
       | sed "s|$ENDPOINT|ENDPOINT|g" \
-      > "$API_DUMP_DIR/$name.json"
+      > "$DUMP_DIR/api/v2/$name.json"
   fi
 
-  mkdir -p "$API_DUMP_DIR/$name"
-  jq -r .results[].url "$API_DUMP_DIR/$name.json" \
+  mkdir -p "$DUMP_DIR/api/v2/$name"
+  jq -r .results[].url "$DUMP_DIR/api/v2/$name.json" \
     | sed "s|ENDPOINT|$ENDPOINT|g" \
     | parallel -j "$(nproc)" ./dump-url.sh
 done
