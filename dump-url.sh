@@ -5,7 +5,7 @@
 url="${1?Provide a pokeapi URL.}"
 
 # Dump to <dump>/<type>/<num>.json
-id_filename="$(printf '%s' "$url" | sed -r "s|^$ENDPOINT/([a-z-]+/[0-9-]+)/$|$DUMP_DIR/\1.json|")"
+id_filename="$(printf '%s' "$url" | sed -r "s|^$ENDPOINT/([a-z-]+/[0-9-]+)/$|$API_DUMP_DIR/\1.json|")"
 if [ -e "$id_filename" ]; then
   echo "$id_filename exists, skipping..." >&2
   exit 0

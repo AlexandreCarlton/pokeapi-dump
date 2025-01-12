@@ -13,7 +13,7 @@ docker run --rm -it \
   -e ENDPOINT=http://localhost:8080 \
   docker.io/alexandrecarlton/pokeapi-dump:latest
 
-curl http://localhost:8080/pokemon/1/
+curl http://localhost:8080/api/v2/pokemon/1/
 ```
 
 ## Motivation
@@ -114,3 +114,16 @@ Summary
 
 Of course, this comes at the cost of reduced functionality - but if all that is
 needed is to look up pokemon data by id, this is a good place to start.
+
+# FAQ
+
+## Why not use [PokeAPI/api-data](https://github.com/PokeAPI/api-data) ?
+
+This is certainly attractive (compared with starting up a server and crawling
+it), but the current approach is preferred for the following reasons:
+
+ - it was written before knowledge of `api-data` existed (whoops).
+ - There is little-to-no chance we risk problems from `api-data` going out of
+   sync with the main `PokeAPI` repository.
+ - sprite/cry data is guaranteed to remain in sync with the JSON data as it
+   exists in the one repo (with submodules).
