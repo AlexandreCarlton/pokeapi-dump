@@ -4,8 +4,10 @@
 
 url="${1?Provide a pokeapi URL.}"
 
-# Dump to <dump>/<type>/<num>.json
-id_filename="$(printf '%s' "$url" | sed -r "s|^$ENDPOINT/(.+)/$|$DUMP_DIR/\1.json|")"
+# Dump to <dump>/<path>/index.json
+id_dir="$(printf '%s' "$url" | sed -r "s|^$ENDPOINT/(.+)/$|$DUMP_DIR/\1|")"
+id_filename="$id_dir/index.json"
+
 if [ -e "$id_filename" ]; then
   echo "$id_filename exists, skipping..." >&2
   exit 0
@@ -13,6 +15,7 @@ else
   echo "Dumping $url to $id_filename..."
 fi
 
+mkdir -p "$id_dir"
 curl -sSfL --retry 10 "$url" \
   | sed "s|$ENDPOINT|ENDPOINT|g" \
   | sed "s|https://raw.githubusercontent.com/PokeAPI/cries/master|ENDPOINT/static|g" \
@@ -21,13 +24,18 @@ curl -sSfL --retry 10 "$url" \
 
 name=$(jq -r .name "$id_filename")
 if [ "$name" != 'null' ]; then
-  # The name might have a '/', so we need to take this into account
-  name_filename="$(dirname "$id_filename")/$name.json"
-  mkdir -p "$(dirname "$name_filename")"
-  # We may occasionally find data with the same name - so we just force overwrite it as a mitigation strategy.
-  # <dump>/<type>/<name>.json -> <id>.json
-  ln -sf -- "$(basename "$id_filename")" "$name_filename"
-  # We create a broken link here, as we will create the source (which needs to capture a runtime variable) on startup.
-  # <dump>/<type>/<name>.json.gz -> <id>.json.gz
-  ln -sf -- "$(basename "$id_filename").gz" "$name_filename.gz"
+  name_dir="$(dirname "$id_dir")/$name"
+  # so we need to take this into account
+
+  # Determine the number of path segments - the name might have a '/'
+  # (e.g /api/v2/location/naranja-academy/uva-academy),
+  # and so must be handled accordingly.
+  segments=$(echo "$name" | tr --complement --delete '/' | wc -c)
+  if [ "$segments" -eq 0 ]; then
+    ln -s -- "$(basename "$id_dir")" "$name_dir"
+  else
+    mkdir -p "$(dirname "$name_dir")"
+    relative="$(printf '../%.0s' $(seq 1 "$segments"))"
+    ln -s -- "$relative$(basename $id_dir)" "$name_dir"
+  fi
 fi

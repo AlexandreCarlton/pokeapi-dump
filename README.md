@@ -40,8 +40,6 @@ We:
  - Pagination parameters are not supported (e.g. `/pokemon?offset=20&limit=10`
    will simply return the entire result set).
  - Path `/pokemon/{id or name}/encounters` not supported.
- - Look-up by name for data that share the same name may return different data to
-   the original (e.g. they may contain different IDs).
 
 # Running
 

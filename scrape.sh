@@ -27,17 +27,17 @@ fi
 # Pull own each each resource (pokemon, item, etc.) to get a list of all
 # things in that resource (pokemon/1, pokemon/2) and dump it to a file.
 jq -r 'keys[]' $DUMP_DIR/api/v2/index.json | while read -r name; do
-  if [ -e "$DUMP_DIR/api/v2/$name.json" ]; then
-    echo "$DUMP_DIR/api/v2/$name.json exists, skipping..." >&2
+  if [ -e "$DUMP_DIR/api/v2/$name/index.json" ]; then
+    echo "$DUMP_DIR/api/v2/$name/index.json exists, skipping..." >&2
   else
-    echo "Dumping $ENDPOINT/api/v2/$name/?limit=$LIMIT to $DUMP_DIR/api/v2/$name.json..."
+    echo "Dumping $ENDPOINT/api/v2/$name/?limit=$LIMIT to $DUMP_DIR/api/v2/$name/index.json..."
+    mkdir -p "$DUMP_DIR/api/v2/$name"
     curl -sSfL "$ENDPOINT/api/v2/$name/?limit=$LIMIT" \
       | sed "s|$ENDPOINT|ENDPOINT|g" \
-      > "$DUMP_DIR/api/v2/$name.json"
+      > "$DUMP_DIR/api/v2/$name/index.json"
   fi
 
-  mkdir -p "$DUMP_DIR/api/v2/$name"
-  jq -r .results[].url "$DUMP_DIR/api/v2/$name.json" \
+  jq -r .results[].url "$DUMP_DIR/api/v2/$name/index.json" \
     | sed "s|ENDPOINT|$ENDPOINT|g" \
     | parallel -j "$(nproc)" ./dump-url.sh
 done
