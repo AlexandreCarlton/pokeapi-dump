@@ -20,6 +20,7 @@ curl -sSfL --retry 10 "$url" \
   | sed "s|$ENDPOINT|ENDPOINT|g" \
   | sed "s|https://raw.githubusercontent.com/PokeAPI/cries/main|ENDPOINT/static|g" \
   | sed "s|https://raw.githubusercontent.com/PokeAPI/sprites/master|ENDPOINT/static|g" \
+  | sed 's|"/api|"ENDPOINT/api|g' \
   > "$id_filename"
 
 name=$(jq -r .name "$id_filename")
