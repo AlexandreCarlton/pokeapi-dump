@@ -23,7 +23,7 @@ curl -sSfL --retry 10 "$url" \
   | sed 's|"/api|"ENDPOINT/api|g' \
   > "$id_filename"
 
-name=$(jq -r .name "$id_filename")
+name=$(jq -r .name "$id_filename" || echo 'null')
 if [ "$name" != 'null' ]; then
   name_dir="$(dirname "$id_dir")/$name"
   # so we need to take this into account

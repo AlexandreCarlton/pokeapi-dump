@@ -42,8 +42,14 @@ jq -r 'keys[]' $DUMP_DIR/api/v2/index.json | while read -r name; do
     | parallel -j "$(nproc)" ./dump-url.sh
 done
 
-# TODO: Not all resources have ids - for example, /pokemon/1/encounters
+# Not all resources have ids - for example, /pokemon/1/encounters
 # We thus scan for these (there is only one type, mercifully) and dump them.
+find $DUMP_DIR/api/v2/pokemon \
+  -type f \
+  -name 'index.json'
+  | jq -r .location_area_encounters \
+  | sed "s|ENDPOINT|$ENDPOINT|g" \
+  | parallel -j "$(nproc)" ./dump-url.sh
 
 # Copy across static files (as otherwise we point to files on raw.githubusercontent.com, which might not match).
 rm -rf $STATIC_DUMP_DIR
