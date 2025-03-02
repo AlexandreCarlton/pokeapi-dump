@@ -4,13 +4,16 @@
 all: pokeapi-up dump image
 
 pokeapi-up:
+	# sed -ri 's/(.*)limit_conn (.*)/\1# limit_conn \2/' pokeapi/Resources/nginx/nginx.conf
 	make --directory=pokeapi docker-setup
 
 pokeapi-down:
 	make --directory=pokeapi docker-down
 
 dump:
-	./scrape.sh
+	uv run -- scrapy crawl pokeapi -L INFO
+	cp -r pokeapi/data/v2/cries/cries dump/static
+	cp -r pokeapi/data/v2/sprites/sprites dump/static
 
 image:
 	docker build --tag alexandrecarlton/pokeapi-dump .

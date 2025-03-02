@@ -32,14 +32,13 @@ and faster.
 We:
 
  - fire up a local instance.
- - trawl through the endpoints, dumping the contents into `.json` files.
+ - trawl through the endpoints using [Scrapy](https://scrapy.org/), dumping the contents into `index.json` files.
  - package this into an NGINX server which can serve this data with ease.
 
 ## Limitations
 
  - Pagination parameters are not supported (e.g. `/pokemon?offset=20&limit=10`
    will simply return the entire result set).
- - Path `/pokemon/{id or name}/encounters` not supported.
 
 # Running
 
@@ -49,8 +48,7 @@ We:
 
  - `curl`
  - `docker-compose`
- - `parallel`
- - `jq`
+ - `uv`
 
 ### Running
 
@@ -125,3 +123,4 @@ it), but the current approach is preferred for the following reasons:
    sync with the main `PokeAPI` repository.
  - sprite/cry data is guaranteed to remain in sync with the JSON data as it
    exists in the one repo (with submodules).
+ - I wanted an excuse to play around with web-scraping.

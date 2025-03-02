@@ -1,0 +1,9 @@
+[project]
+name = "pokeapi-dump"
+version = "0.1.0"
+description = "Scrapes an instance of pokeapi and dumps JSON files to a directory."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "scrapy==2.12.0",
+]
