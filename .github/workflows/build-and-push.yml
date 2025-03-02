@@ -12,6 +12,11 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "0.6.3"
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
